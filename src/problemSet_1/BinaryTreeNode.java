@@ -5,6 +5,8 @@ public class BinaryTreeNode<T> {
 	T data;
 	BinaryTreeNode<T> leftNode;
 	BinaryTreeNode<T> rightNode;
+	BinaryTreeNode<T> previousSibling;
+	BinaryTreeNode<T> nextSibling;
 	
 	public T getData() {
 		return data;

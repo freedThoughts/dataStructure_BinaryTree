@@ -1,9 +1,6 @@
 package problemSet_1;
 
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class BinaryTreeOperations implements IOperations{
 	
@@ -357,6 +354,99 @@ public class BinaryTreeOperations implements IOperations{
 		
 		return result;
 	}
+
+	@Override
+	public BinaryTreeNode<Integer> LCA(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2) {
+		if (node == null)
+			return node;
+		if (node == searchNode1 || node == searchNode2)
+			return node;
+
+		BinaryTreeNode nodeFromLeft = LCA(node.leftNode, searchNode1, searchNode2);
+		// Both of the search nodes are on the left sub-tree
+		if (nodeFromLeft != null && nodeFromLeft != searchNode1 && nodeFromLeft != searchNode2)
+			return node;
+		BinaryTreeNode nodeFromRight = LCA(node.rightNode, searchNode1, searchNode2);
+		if (nodeFromLeft != null && nodeFromRight != null)
+			return node;
+		if (nodeFromLeft == null && nodeFromRight == null)
+			return null;
+		return nodeFromLeft == null ? nodeFromRight : nodeFromLeft;
+	}
+
+	// Time Complexity ~~ O(n)
+	// Space Complexity ~~ O(2n)
+	@Override
+	public void zigZagTraversal(BinaryTreeNode<Integer> node){
+		Stack<BinaryTreeNode<Integer>> leftToRightStack = new Stack<BinaryTreeNode<Integer>>();
+		Stack<BinaryTreeNode<Integer>> rightToLeft = new Stack<BinaryTreeNode<Integer>>();
+		rightToLeft.push(node);
+		while (!leftToRightStack.isEmpty() || !rightToLeft.isEmpty()) {
+			while (!rightToLeft.isEmpty()) {
+				BinaryTreeNode<Integer> currentNode = rightToLeft.pop();
+				System.out.println(currentNode.data);
+				if (currentNode.leftNode != null)
+					leftToRightStack.push(currentNode.leftNode);
+				if (currentNode.rightNode != null)
+					leftToRightStack.push(currentNode.rightNode);
+			}
+
+			while (!leftToRightStack.isEmpty()) {
+				BinaryTreeNode<Integer> currentNode = leftToRightStack.pop();
+				System.out.println(currentNode.data);
+				if (currentNode.rightNode != null)
+					rightToLeft.push(currentNode.rightNode);
+				if (currentNode.leftNode != null)
+					rightToLeft.push(currentNode.leftNode);
+			}
+		}
+	}
+
+	// Time complexity ~~ O(n)
+	// Space Complexity ~~ O(1)
+	@Override
+	public void fillSiblingsRecursively(BinaryTreeNode<Integer> node){
+		if (node == null)
+			return;
+		if (node.leftNode != null) {
+			node.leftNode.nextSibling = node.rightNode;
+			node.leftNode.previousSibling = node.previousSibling != null ? node.previousSibling.rightNode : null;
+		}
+		if (node.rightNode != null) {
+			node.rightNode.nextSibling = node.nextSibling != null ? node.nextSibling.leftNode : null;
+			node.rightNode.previousSibling = node.leftNode;
+		}
+
+		fillSiblingsRecursively(node.leftNode);
+		fillSiblingsRecursively(node.rightNode);
+	}
+
+	// Time Complexity ~~ O(n)
+	// Space Complexity ~~ O(n)  -- for Queue
+	@Override
+	public void fillSiblingsIteratively(BinaryTreeNode<Integer> node) {
+		Queue<BinaryTreeNode<Integer>> queue = new LinkedList<BinaryTreeNode<Integer>>();
+		queue.offer(node);
+		queue.offer(null);
+		BinaryTreeNode<Integer> previousSibling = null;
+		while (!queue.isEmpty()) {
+			BinaryTreeNode<Integer> currentNode = queue.poll();
+			if (currentNode == null) {
+				previousSibling = currentNode;
+				if (!queue.isEmpty())
+					queue.offer(null);
+				continue;
+			}
+			currentNode.previousSibling = previousSibling;
+			currentNode.nextSibling = queue.peek();
+			previousSibling = currentNode;
+
+			if (currentNode.leftNode != null)
+				queue.offer(currentNode.leftNode);
+			if (currentNode.rightNode != null)
+				queue.offer(currentNode.rightNode);
+		}
+	}
 	
 	public static void main(String[] args) {
 		
@@ -369,8 +459,10 @@ public class BinaryTreeOperations implements IOperations{
 		
 		BinaryTreeOperations object = new BinaryTreeOperations();
 		BinaryTreeNode<Integer> root = object.constructBinaryTree();
-		object.deleteNodeGivenData(2, root);
+		//object.deleteNodeGivenData(2, root);
 		object.levelOrderTraversal(root);
+
+		System.out.println();
 		
 		//System.out.println(object.hasPathSum(root, 8));
 		//object.mirroringOfBinaryTree(root);

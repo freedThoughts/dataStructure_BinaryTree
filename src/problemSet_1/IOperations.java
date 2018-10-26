@@ -16,5 +16,8 @@ public interface IOperations {
 	boolean hasPathSum(BinaryTreeNode<Integer> node, int sum);
 	void deleteNodeGivenData(int dataToDelete, BinaryTreeNode<Integer> root);
 	int DiameterOfTree(BinaryTreeNode<Integer> root);
-
+	BinaryTreeNode<Integer> LCA(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2);
+	void zigZagTraversal(BinaryTreeNode<Integer> node);
+	void fillSiblingsRecursively(BinaryTreeNode<Integer> node);
+	void fillSiblingsIteratively(BinaryTreeNode<Integer> node);
 }
