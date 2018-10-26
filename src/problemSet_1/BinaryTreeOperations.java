@@ -3,7 +3,8 @@ package problemSet_1;
 import java.util.*;
 
 public class BinaryTreeOperations implements IOperations{
-	
+
+	@Override
 	public BinaryTreeNode<Integer> constructBinaryTree(){
 		BinaryTreeNode<Integer> node7 = new BinaryTreeNode<Integer>(7, null, null);
 		BinaryTreeNode<Integer> node6 = new BinaryTreeNode<Integer>(6, null, null);
@@ -14,7 +15,8 @@ public class BinaryTreeOperations implements IOperations{
 		BinaryTreeNode<Integer> node1 = new BinaryTreeNode<Integer>(1, node2, node3);
 		return node1;
 	}
-	
+
+	@Override
 	public void preOrderTraversalRecursive(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return;
@@ -25,7 +27,8 @@ public class BinaryTreeOperations implements IOperations{
 		preOrderTraversalRecursive(node.getLeftNode());
 		preOrderTraversalRecursive(node.getRightNode());
 	}
-	
+
+	@Override
 	public void preOrderTraversal(BinaryTreeNode<Integer> node){
 		Stack<BinaryTreeNode<Integer>> stack = new Stack<BinaryTreeNode<Integer>>();
 		while(node != null || !stack.isEmpty()){
@@ -40,7 +43,8 @@ public class BinaryTreeOperations implements IOperations{
 			node = node.getRightNode();
 		}
 	}
-	
+
+	@Override
 	public void inOrderTraversalRecursive(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return;
@@ -49,7 +53,8 @@ public class BinaryTreeOperations implements IOperations{
 		System.out.println(node.getData());
 		inOrderTraversalRecursive(node.getRightNode());
 	}
-	
+
+	@Override
 	public void inOrderTraversal(BinaryTreeNode<Integer> node){
 		Stack<BinaryTreeNode<Integer>> stack = new Stack<BinaryTreeNode<Integer>>();
 		while(node != null || !stack.isEmpty()){
@@ -64,7 +69,8 @@ public class BinaryTreeOperations implements IOperations{
 			node = node.getRightNode();
 		}
 	}
-	
+
+	@Override
 	public void postOrderTraversalRecursive(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return;
@@ -94,7 +100,8 @@ public class BinaryTreeOperations implements IOperations{
 			node = node.getRightNode();
 		}
 	}*/
-	
+
+	@Override
 	public void levelOrderTraversal(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return;
@@ -110,7 +117,8 @@ public class BinaryTreeOperations implements IOperations{
 				queue.add(currentNode.getRightNode());
 		}
 	}
-	
+
+	@Override
 	public int getHeightRecursive(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return 0;
@@ -144,6 +152,7 @@ public class BinaryTreeOperations implements IOperations{
 	}
 	
 	static int diameter;
+	@Override
 	public int getDiameterOfBinaryTree(BinaryTreeNode<Integer> root){
 		return Math.max(diameter, getHeightForDiameter(root));
 		// The reason why we are calculating height is, for sub-tree at bottom, maximum node is 3 - root, left, right
@@ -163,7 +172,8 @@ public class BinaryTreeOperations implements IOperations{
 		
 		return 1 + Math.max(leftHeight, rightHeight);
 	}
-	
+
+	@Override
 	public int levelWithMaxDataSum(BinaryTreeNode<Integer> node){
 		int maxDataLevel = 0;
 		int level = 1;
@@ -197,7 +207,8 @@ public class BinaryTreeOperations implements IOperations{
 		System.out.println("Max Sum : " + maxDataSum);
 		return maxDataLevel;
 	}
-	
+
+	@Override
 	public void printAllPaths(BinaryTreeNode<Integer> root){
 		int maxLengthOfPath = getHeightRecursive(root);
 		BinaryTreeNode<Integer>[] path = new BinaryTreeNode[maxLengthOfPath];
@@ -240,7 +251,8 @@ public class BinaryTreeOperations implements IOperations{
 		int subSum = sum - node.getData(); 
 		return hasPathSum(node.getLeftNode(), subSum) || hasPathSum(node.getRightNode(), subSum);
 	}
-	
+
+	@Override
 	public void mirroringOfBinaryTree(BinaryTreeNode<Integer> node){
 		if(node == null)
 			return;

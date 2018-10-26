@@ -20,4 +20,5 @@ public interface IOperations {
 	void zigZagTraversal(BinaryTreeNode<Integer> node);
 	void fillSiblingsRecursively(BinaryTreeNode<Integer> node);
 	void fillSiblingsIteratively(BinaryTreeNode<Integer> node);
+	void mirroringOfBinaryTree(BinaryTreeNode<Integer> node);
 }
