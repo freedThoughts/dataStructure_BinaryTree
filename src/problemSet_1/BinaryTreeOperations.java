@@ -79,6 +79,30 @@ public class BinaryTreeOperations implements IOperations{
 		postOrderTraversalRecursive(node.getRightNode());
 		System.out.println(node.getData());
 	}
+
+	@Override
+	public void postOrderTraversal(BinaryTreeNode<Integer> node) {
+		if (node == null)
+			return;
+		Stack<BinaryTreeNode<Integer>> stack = new Stack<>();
+		while (!stack.isEmpty() || node != null) {
+			while (node != null) {
+				stack.push(node);
+				node = node.leftNode;
+			}
+
+			if (!stack.isEmpty() && stack.peek().rightNode != null) {
+				node = stack.peek().rightNode;
+				continue;
+			}
+
+			while (!stack.isEmpty() &&stack.peek().rightNode == node) {
+				node = stack.pop();
+				System.out.println(node.data);
+			}
+			node = stack.isEmpty() ? null : stack.peek().rightNode;
+		}
+	}
 	
 	//TODO
 /*	public void postOrderTraversal(BinaryTreeNode<Integer> node){
@@ -386,6 +410,31 @@ public class BinaryTreeOperations implements IOperations{
 		return nodeFromLeft == null ? nodeFromRight : nodeFromLeft;
 	}
 
+	@Override
+	public void findLCA(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2) {
+		System.out.println(LCA2(node, searchNode1, searchNode2)[1]);
+
+	}
+	private int[] LCA2(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2) {
+		if (node == null) {
+			return new int[] {0, 0};
+		}
+
+		int[] leftTreeNode = LCA2(node.leftNode, searchNode1, searchNode2);
+		if (leftTreeNode[0] == 2) {
+			return leftTreeNode;
+		}
+
+		int[] rightTreeNode =LCA2(node.rightNode, searchNode1,searchNode2);
+		if (rightTreeNode[0] == 2) {
+			return rightTreeNode;
+		}
+
+		int val = leftTreeNode[0] + rightTreeNode[0] +
+				((node.data == searchNode1.data || node.data == searchNode2.data) ? 1:0);
+		return new int[] {val, node.data};
+	}
+
 	// Time Complexity ~~ O(n)
 	// Space Complexity ~~ O(2n)
 	@Override
@@ -412,6 +461,28 @@ public class BinaryTreeOperations implements IOperations{
 					rightToLeft.push(currentNode.leftNode);
 			}
 		}
+	}
+
+	@Override
+	public void printVerticalSum(BinaryTreeNode<Integer> node) {
+		Map<Integer, Integer> indexSumMap = new HashMap<>();
+		verticalSumCal(node, 0, indexSumMap);
+		indexSumMap.entrySet().forEach(entry -> System.out.println(entry.getKey() + " " + entry.getValue()));
+	}
+
+	private void verticalSumCal(BinaryTreeNode<Integer> node, int index, Map<Integer, Integer> indexSumMap) {
+		if (node == null)
+			return;
+
+		Integer sum = indexSumMap.get(node.data);
+		if (sum == null) {
+			indexSumMap.put(index, node.data);
+		} else {
+			indexSumMap.put(index, node.data + sum);
+		}
+
+		verticalSumCal(node.leftNode, index-1, indexSumMap);
+		verticalSumCal(node.rightNode, index+1, indexSumMap);
 	}
 
 	// Time complexity ~~ O(n)
@@ -459,20 +530,70 @@ public class BinaryTreeOperations implements IOperations{
 				queue.offer(currentNode.rightNode);
 		}
 	}
+
+	@Override
+	public BinaryTreeNode<Integer> buildTreeFromInOrderPreOrder() {
+		int[] preOrder = {1, 2, 4, 8, 9, 5, 10,11, 3, 6, 12, 13, 7, 14, 15};
+		int[] inOrder = {8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15};
+		return buildTree(preOrder, inOrder, 0, preOrder.length-1, 0, inOrder.length-1);
+	}
+
+	private BinaryTreeNode<Integer> buildTree(int[] preOrder, int[] inOrder, int preStartIndex, int preEndIndex, int inStartIndex, int inEndIndex) {
+		if (inStartIndex > inEndIndex) {
+			return null;
+		}
+
+		int preRootIndex = -1, inRootIndex = -1;
+		boolean exitCondition = false;
+		for (int i = preStartIndex; !exitCondition && i <= preEndIndex; i++) {
+			for (int j = inStartIndex; !exitCondition && j <= inEndIndex; j++) {
+				if (preOrder[i] == inOrder[j]) {
+					preRootIndex = i;
+					inRootIndex = j;
+					exitCondition = true;
+				}
+			}
+		}
+
+		BinaryTreeNode<Integer> node = new BinaryTreeNode();
+		node.setData(inOrder[inRootIndex]);
+		node.setLeftNode(buildTree(preOrder, inOrder, preRootIndex+1, preEndIndex, inStartIndex, inRootIndex-1));
+		node.setRightNode(buildTree(preOrder, inOrder, preRootIndex+1, preEndIndex, inRootIndex+1, inEndIndex));
+		return node;
+	}
+
+	public BinaryTreeNode ConstructCompleteBinaryTreeByCharSequence() {
+		return (BinaryTreeNode) constructTree("ILILL", 0)[1];
+	}
+
+	private Object[] constructTree(String str, int index){
+		if (index == str.length())
+			return new Object[] {index, null};
+
+		char ch = str.charAt(index);
+		BinaryTreeNode<String> node = new BinaryTreeNode<>();
+		node.setData(new String(new char[] {ch}));
+
+		if (ch == 'L')
+			return new Object[] {index+1, node};
+
+		Object[] leftTreeResult = constructTree(str, index+1);
+		node.setLeftNode((BinaryTreeNode<String>) leftTreeResult[1]);
+
+		Object[] rightTreeResult = constructTree(str, (Integer) leftTreeResult[0] + 1);
+		node.setRightNode((BinaryTreeNode<String>) rightTreeResult[1]);
+
+		return new Object[] {(Integer)rightTreeResult[0], node};
+	}
 	
 	public static void main(String[] args) {
-		
-//
-//		System.out.println(Integer.MAX_VALUE);
-//		System.out.println(Integer.MAX_VALUE +1 );
-//		
-//		System.out.println(Integer.MIN_VALUE);
-//		System.out.println(Integer.MIN_VALUE -1);
-		
 		BinaryTreeOperations object = new BinaryTreeOperations();
 		BinaryTreeNode<Integer> root = object.constructBinaryTree();
+
+		//object.findLCA(root, new BinaryTreeNode<Integer>(6, null, null), new BinaryTreeNode<Integer>(4, null, null));
+
 		//object.deleteNodeGivenData(2, root);
-		object.levelOrderTraversal(root);
+		//object.preOrderTraversal(object.buildTreeFromInOrderPreOrder());
 
 		System.out.println();
 		

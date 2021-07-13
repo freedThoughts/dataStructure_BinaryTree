@@ -7,6 +7,7 @@ public interface IOperations {
 	void inOrderTraversalRecursive(BinaryTreeNode<Integer> node);
 	void inOrderTraversal(BinaryTreeNode<Integer> node);
 	void postOrderTraversalRecursive(BinaryTreeNode<Integer> node);
+	void postOrderTraversal(BinaryTreeNode<Integer> node);
 	void levelOrderTraversal(BinaryTreeNode<Integer> node);
 	int getHeightRecursive(BinaryTreeNode<Integer> node);
 	int getHeight(BinaryTreeNode<Integer> node);
@@ -17,8 +18,12 @@ public interface IOperations {
 	void deleteNodeGivenData(int dataToDelete, BinaryTreeNode<Integer> root);
 	int DiameterOfTree(BinaryTreeNode<Integer> root);
 	BinaryTreeNode<Integer> LCA(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2);
+	void findLCA(BinaryTreeNode<Integer> node, BinaryTreeNode<Integer> searchNode1, BinaryTreeNode<Integer> searchNode2);
 	void zigZagTraversal(BinaryTreeNode<Integer> node);
+	void printVerticalSum(BinaryTreeNode<Integer> node);
 	void fillSiblingsRecursively(BinaryTreeNode<Integer> node);
 	void fillSiblingsIteratively(BinaryTreeNode<Integer> node);
 	void mirroringOfBinaryTree(BinaryTreeNode<Integer> node);
+	BinaryTreeNode<Integer> buildTreeFromInOrderPreOrder();
+	BinaryTreeNode ConstructCompleteBinaryTreeByCharSequence();
 }
